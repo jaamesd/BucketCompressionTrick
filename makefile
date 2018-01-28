@@ -1,6 +1,6 @@
 #### PROJECT SETTINGS ####
 # The name of the executable to be created
-BIN_NAME := CompressionTrick
+BIN_NAME := BucketCompressionTrick
 # Compiler used
 CXX ?= g++
 # Extension of source files used in the project
