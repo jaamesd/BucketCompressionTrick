@@ -2,6 +2,7 @@
 #include <array>
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 #include <cassert>
 #include <thread>
 #include <chrono>
