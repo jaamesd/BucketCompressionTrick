@@ -13,9 +13,9 @@ class BucketCompressor
 {
 private:
     static bool mInitialized;
-    static uint16_t mMaxIndex;
-    static array<uint16_t, UINT16_MAX> mFwdLut;
-    static array<uint16_t, UINT16_MAX / 4> mRevLut;
+
+    static array<uint16_t, 1 << 16> mFwdLut;
+    static array<uint16_t, 1 << 12> mRevLut;
 
     BucketCompressor()
     {
@@ -23,7 +23,7 @@ private:
         {
             return;
         }
-
+    static uint16_t mMaxIndex = 0;
         for (uint8_t i = 0; i < 1 << 4; i++)
         {
             for (uint8_t j = 0; j <= i; j++)
@@ -53,6 +53,7 @@ private:
                 }
             }
         }
+        mInitialized = true;
     }
 
     static BucketCompressor& Instance()
@@ -113,7 +114,7 @@ public:
 
         for (auto &data : dataIn)
         {
-            cout << +data << " ";
+            cout << setfill('0') << setw(2) << +data << " ";
         }
 
         cout << "} Into: 0x" << hex << setfill('0') << setw(4) << code << endl;
@@ -121,7 +122,7 @@ public:
 
     static void Decompress(const uint16_t &code, array<uint8_t, 4>&dataOut)
     {
-        assert(code >> 4 < mMaxIndex);
+        // assert(code >> 4 < mMaxIndex);
 
         // use the lut index to retrieve the sorted values
         uint16_t sortedValues = Instance().mRevLut[code >> 4];
@@ -136,7 +137,7 @@ public:
 
         for (auto &data : dataOut)
         {
-            cout << +data << " ";
+            cout << setfill('0') << setw(2) << +data << " ";
         }
 
         cout << "} From: 0x" << hex << setfill('0') << setw(4) << code << endl;
@@ -168,9 +169,9 @@ public:
 };
 
 bool BucketCompressor::mInitialized;
-uint16_t BucketCompressor::mMaxIndex;
-array<uint16_t, UINT16_MAX> BucketCompressor::mFwdLut;
-array<uint16_t, UINT16_MAX / 4> BucketCompressor::mRevLut;
+// uint16_t BucketCompressor::mMaxIndex;
+array<uint16_t, 1 << 16> BucketCompressor::mFwdLut;
+array<uint16_t, 1 << 12> BucketCompressor::mRevLut;
 
 int main(int argc, char const *argv[])
 {
@@ -178,7 +179,9 @@ int main(int argc, char const *argv[])
     std::array<uint8_t, 4> dataIn;
     std::array<uint8_t, 4> dataOut;
 
-    for (uint8_t i = 0; i < 1 << 4; i++)
+    cout << "--------------------------------------------" << endl;
+    cout << "test all sets of four 5-bit numbers in order" << endl;
+    for (uint8_t i = 0; i < 1 << 5; i++)
     {
         for (uint8_t j = 0; j <= i; j++)
         {
@@ -186,28 +189,28 @@ int main(int argc, char const *argv[])
             {
                 for (uint8_t l = 0; l <= k; l++)
                 {
-                    cout << "----------------------------------------" << endl;
+                    cout << "--------------------------------------------" << endl;
                     dataIn[0] = i;
                     dataIn[1] = j;
                     dataIn[2] = k;
                     dataIn[3] = l;
                     BucketCompressor::Compress(code, dataIn);
                     BucketCompressor::Decompress(code, dataOut);
+                    sort(dataIn.begin(), dataIn.end());
+                    sort(dataOut.begin(), dataOut.end());
                     assert(dataIn == dataOut);
                 }
             }
         }
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
-
+    cout << "test random sets of four 5-bit numbers" << endl;
     srand(time(nullptr));
     while(1) {
-        cout << "----------------------------------------" << endl;
+        cout << "--------------------------------------------" << endl;
         uint32_t x = rand() % (1 << 20);
         BucketCompressor::Compress(code, x);
         BucketCompressor::Decompress(code, x);
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
     return 0;
