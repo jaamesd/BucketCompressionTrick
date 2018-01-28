@@ -13,7 +13,7 @@ class BucketCompressor
 {
 private:
     static bool mInitialized;
-
+    static uint16_t mMaxIndex;
     static array<uint16_t, 1 << 16> mFwdLut;
     static array<uint16_t, 1 << 12> mRevLut;
 
@@ -23,7 +23,6 @@ private:
         {
             return;
         }
-    static uint16_t mMaxIndex = 0;
         for (uint8_t i = 0; i < 1 << 4; i++)
         {
             for (uint8_t j = 0; j <= i; j++)
@@ -122,7 +121,7 @@ public:
 
     static void Decompress(const uint16_t &code, array<uint8_t, 4>&dataOut)
     {
-        // assert(code >> 4 < mMaxIndex);
+        assert(code >> 4 < mMaxIndex);
 
         // use the lut index to retrieve the sorted values
         uint16_t sortedValues = Instance().mRevLut[code >> 4];
@@ -169,7 +168,7 @@ public:
 };
 
 bool BucketCompressor::mInitialized;
-// uint16_t BucketCompressor::mMaxIndex;
+uint16_t BucketCompressor::mMaxIndex;
 array<uint16_t, 1 << 16> BucketCompressor::mFwdLut;
 array<uint16_t, 1 << 12> BucketCompressor::mRevLut;
 
