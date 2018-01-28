@@ -195,8 +195,6 @@ int main(int argc, char const *argv[])
                     dataIn[3] = l;
                     BucketCompressor::Compress(code, dataIn);
                     BucketCompressor::Decompress(code, dataOut);
-                    sort(dataIn.begin(), dataIn.end());
-                    sort(dataOut.begin(), dataOut.end());
                     assert(dataIn == dataOut);
                 }
             }
