@@ -40,7 +40,7 @@ private:
                          *  |  i  |  j  |  k  |  l  |
                          *  where i >= j >= k >= l, all are 4 bit values
                          *  the largest value is stored in the least significant
-                         *  bits so it's monontically increasing just like index
+                         *  bits so it's monotonically increasing just like index
                          */
                         mFwdLut[sortedValues] = mMaxIndex;
                         mRevLut[mMaxIndex] = sortedValues;
@@ -69,14 +69,14 @@ public:
             assert(data < 1 << 5);
         }
 
-        // Sort to decending order
+        // Sort to descending order
         sort(dataIn.begin(), dataIn.end(), greater<uint8_t>());
 
         /*  0                                5
          *  |<----------  5 bits  ---------->|
          *  |   value & 1   |   value >> 1   |
          *  |             value              |
-         *  split value into most sigificant bits and least sigificant bit
+         *  split value into most significant bits and least significant bit
          */
 
         /*  0                                   16
@@ -84,8 +84,8 @@ public:
          *  | i >> 1 | j >> 1 | k >> 1 | l >> 1 |
          *  |           sorted values           |
          *  where i >= j >= k >= l, all are 5 bit values
-         *  use the most sigificant bits for each value to form the sorted word
-         *  the largest value is again stored in the least sigificant bits to
+         *  use the most significant bits for each value to form the sorted word
+         *  the largest value is again stored in the least significant bits to
          *  match our lookup tables
          */
 
@@ -101,7 +101,7 @@ public:
          *  where i >= j >= k >= l
          *  look up the index of sorted value in the lookup table we created and
          *  store in the least significant 4 bits of the code, the least
-         *  sigificant bits of the values in sorted order so we can retrieve it
+         *  significant bits of the values in sorted order so we can retrieve it
          */
         code = Instance().mFwdLut[sortedValues] << 4 |
                 (dataIn[0] & 1) << 0 |
