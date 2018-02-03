@@ -147,10 +147,10 @@ public:
         assert(dataIn <= ((1 << 20) - 1));
         std::array<uint8_t, 4> buffer =
         {
-            static_cast<uint8_t>(dataIn >> (0 * 4) & 0xf),
-            static_cast<uint8_t>(dataIn >> (1 * 4) & 0xf),
-            static_cast<uint8_t>(dataIn >> (2 * 4) & 0xf),
-            static_cast<uint8_t>(dataIn >> (3 * 4) & 0xf),
+            static_cast<uint8_t>(dataIn >> (0 * 5) & 0x1f),
+            static_cast<uint8_t>(dataIn >> (1 * 5) & 0x1f),
+            static_cast<uint8_t>(dataIn >> (2 * 5) & 0x1f),
+            static_cast<uint8_t>(dataIn >> (3 * 5) & 0x1f),
         };
         Compress(code, buffer);
     }
@@ -160,10 +160,10 @@ public:
         std::array<uint8_t, 4> buffer;
         Decompress(code, buffer);
 
-        dataOut = (buffer[0] & 0xf) << (0 * 4) |
-                  (buffer[1] & 0xf) << (1 * 4) |
-                  (buffer[2] & 0xf) << (2 * 4) |
-                  (buffer[3] & 0xf) << (3 * 4);
+        dataOut = (buffer[0] & 0x1f) << (0 * 5) |
+                  (buffer[1] & 0x1f) << (1 * 5) |
+                  (buffer[2] & 0x1f) << (2 * 5) |
+                  (buffer[3] & 0x1f) << (3 * 5);
     }
 };
 
