@@ -10,7 +10,7 @@ This trick works by trading control over the ordering of the numbers for extra p
 
 There are multichoose(2<sup>4</sup>, 4) = 3876 possible unique values for a **multiset** of 4 4-bit values, whereas there are 65536 possible unique values for a 16 bit integer. log2(multichoose(2<sup>4</sup>, 4)) = 11.92 so if we can map all possible values to a 12 bit representation, it leaves us with 4 bits to play around with and that's enough to store the extra bit in our four 5-bit numbers. Theoretically we have a bit more than 4 bits to play around with as log2(2<sup>16</sup> / 3876) = 4.08 or from 16 - 11.92 but in practice that fraction is a bit harder to extract without a larger or more indirect lookup table.
 
-More generally, a multiset of m n-bit numbers cannot hold more than m * n bits of information and it is possible to leverage that difference to store m' n'-bit numbers in the same m * n bits as long as log2(multichoose(m', n')) <= m * n. log2(multichoose(2<sup>5</sup>, 4)) = 15.67 bits < 16 bits. 
+More generally, a multiset of m n-bit numbers cannot hold more than m * n bits of information and it is possible to leverage that difference to store m' n'-bit numbers in the same m * n bits as long as log2(multichoose(2<sup>m'</sup>, n')) <= m * n. log2(multichoose(2<sup>5</sup>, 4)) = 15.67 bits < 16 bits. 
 
 ### Further reading:
 * More information on multisets: [Wikipedia](https://en.wikipedia.org/wiki/Multiset#Counting_multisets)
